@@ -4,6 +4,7 @@
     <v-content id="main-content">
       <router-view v-if="user"/>
       <v-container v-else fill-height>
+        <v-snackbar v-model="errorSnackbar" top color="error">{{ errorMessage }}</v-snackbar>
         <v-layout v-if="!loading" row justify-center align-center>
           <v-btn @click="signIn">
             <v-icon left>mdi-google</v-icon>
@@ -37,7 +38,9 @@ export default {
     return {
       authEvent: () => {},
       user: null,
-      loading: true
+      loading: true,
+      errorSnackbar: false,
+      errorMessage: ''
     }
   },
   mounted () {
@@ -45,7 +48,8 @@ export default {
       this.user = user
       this.loading = false
     }, (error) => {
-      console.error('Auth', error.message)
+      this.errorMessage = 'Auth: ' + error.message
+      this.errorSnackbar = true
       this.user = null
     })
   },
@@ -53,7 +57,8 @@ export default {
     signIn () {
       const provider = new auth.GoogleAuthProvider()
       auth().signInWithPopup(provider).catch((error) => {
-        console.error('Sign in', error.message)
+        this.errorMessage = 'Sign In: ' + error.message
+        this.errorSnackbar = true
       })
     }
   },
