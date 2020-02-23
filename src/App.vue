@@ -24,6 +24,10 @@
         <span>Play</span>
         <v-icon>mdi-play</v-icon>
       </v-btn>
+      <v-btn to="/list">
+        <span>List</span>
+        <v-icon>mdi-view-list</v-icon>
+      </v-btn>
     </v-bottom-navigation>
   </v-app>
 </template>

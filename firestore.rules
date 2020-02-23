@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /vocab/{vocabId} {
+    match /word/{vocabId} {
       allow read: if request.auth != null;
     }
   }

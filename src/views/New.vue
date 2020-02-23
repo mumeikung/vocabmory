@@ -5,6 +5,7 @@
     <v-form ref="form" v-model="isValid">
       <v-text-field v-model="vocab" :rules="[v => !!v || 'โปรดกรอกคำ']" label="คำ" outlined hint="คำจะถูกนำไปแปลงเป็นเสียง" :disabled="loading" autocomplete="off"/>
       <v-text-field v-model="mean" :rules="[v => !!v || 'โปรดกรอกความหมาย']" label="ความหมาย" outlined :disabled="loading" autocomplete="off"/>
+      <v-select v-model.number="lesson" label="บทเรียน" :rules="[v => typeof v === 'number' && v >= 0 && v <= 12 || 'โปรดเลือกเลขบทเรียน']" :items="lessonList" outlined :disabled="loading"/>
       <v-text-field v-model="note" label="Note" outlined hide-details :disabled="loading" autocomplete="off"/>
       <v-radio-group v-model="type" :rules="[v => !!v || 'โปรดเลือกประเภท']" label="ประเภท" mandatory :disabled="loading">
         <v-radio v-for="item in typeList" :key="item.value" :label="item.text" :value="item.value"/>
@@ -26,6 +27,21 @@ export default {
     return {
       isValid: false,
       loading: false,
+      lessonList: [
+        { text: 'Lesson 1', value: 1 },
+        { text: 'Lesson 2', value: 2 },
+        { text: 'Lesson 3', value: 3 },
+        { text: 'Lesson 4', value: 4 },
+        { text: 'Lesson 5', value: 5 },
+        { text: 'Lesson 6', value: 6 },
+        { text: 'Lesson 7', value: 7 },
+        { text: 'Lesson 8', value: 8 },
+        { text: 'Lesson 9', value: 9 },
+        { text: 'Lesson 10', value: 10 },
+        { text: 'Lesson 11', value: 11 },
+        { text: 'Lesson 12', value: 12 },
+        { text: 'อื่น ๆ', value: 0 }
+      ],
       typeList: [
         { text: 'คำนาม', value: 'noun' },
         { text: 'คำคุณศัพท์', value: 'adjective' },
@@ -33,10 +49,11 @@ export default {
         { text: 'สำนวน - วลี', value: 'phrase' },
         { text: 'อื่น ๆ', value: 'other' }
       ],
-      vocab: '',
-      mean: '',
-      note: '',
-      type: '',
+      vocab: null,
+      mean: null,
+      lesson: null,
+      note: null,
+      type: null,
       successSnackbar: false,
       successMessage: '',
       errorSnackbar: false,
@@ -53,6 +70,7 @@ export default {
       addWord({
         vocab: this.vocab,
         mean: this.mean,
+        lesson: this.lesson,
         note: this.note,
         type: this.type
       }).then((response) => {

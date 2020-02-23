@@ -14,10 +14,12 @@ const textToSpeech = new ttspeech.TextToSpeechClient()
 
 export const addWord = functions.region('asia-east2').https.onCall(async (data, context) => {
   if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated')
+  if (context.auth.uid !== functions.config().admin.uid) throw new functions.https.HttpsError('unauthenticated', 'Admin Only')
 
   if (!data) throw new functions.https.HttpsError('invalid-argument', 'โปรดกรอกข้อมูล')
   if (!data.vocab) throw new functions.https.HttpsError('invalid-argument', 'โปรดกรอก คำ')
   if (!data.mean) throw new functions.https.HttpsError('invalid-argument', 'โปรดกรอก ความหมาย')
+  if (!(data.lesson >= 0)) throw new functions.https.HttpsError('invalid-argument', 'โปรดกรอก เลขบทเรียน')
   if (!data.type) throw new functions.https.HttpsError('invalid-argument', 'โปรดเลือก ประเภท')
 
   // get sound file
@@ -64,6 +66,7 @@ export const addWord = functions.region('asia-east2').https.onCall(async (data, 
       vocab: data.vocab,
       mean: data.mean,
       note: data.note || '',
+      lesson: data.lesson,
       type: data.type,
       sound: firebasePath
     })

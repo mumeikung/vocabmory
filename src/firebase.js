@@ -6,8 +6,13 @@ import config from './config'
 
 firebase.initializeApp(config)
 
+const firestore = firebase.firestore()
+firestore.enablePersistence({
+  synchronizeTabs: true
+})
+
 export const auth = firebase.auth
-export const firestore = firebase.firestore
+export { firestore }
 export const functions = firebase.app().functions('asia-east2')
 
-export default firebase
+export default firebase.app()
