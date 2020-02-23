@@ -140,6 +140,13 @@
     through2 "^3.0.0"
     xdg-basedir "^4.0.0"
 
+"@google-cloud/text-to-speech@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/text-to-speech/-/text-to-speech-2.2.0.tgz#5feb7e2618a9eec3595375d77e8004178d8d5e86"
+  integrity sha512-RM0CQEHs7HdtS0nYNHrK5a0zgoqS47OxTdQQJ7jdm3+JuEfZyIM2Xw+VOJvZpAClv/Ac64DQwLeA0y4TYZ3sRw==
+  dependencies:
+    google-gax "^1.9.0"
+
 "@grpc/grpc-js@^0.6.12":
   version "0.6.17"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-0.6.17.tgz#e7786aee6296a6659bb871ce72100416edd4c121"
@@ -294,6 +301,11 @@
   dependencies:
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
+
+"@types/uuid@^3.4.7":
+  version "3.4.7"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.4.7.tgz#51d42247473bc00e38cc8dfaf70d936842a36c03"
+  integrity sha512-C2j2FWgQkF1ru12SjZJyMaTPxs/f6n90+5G5qNakBxKXjTBc/YTSelHh4Pz1HUDwxFXD9WvpQhOGCDC+/Y4mIQ==
 
 abort-controller@^3.0.0:
   version "3.0.0"
@@ -873,7 +885,7 @@ google-auth-library@^5.0.0, google-auth-library@^5.5.0:
     jws "^4.0.0"
     lru-cache "^5.0.0"
 
-google-gax@^1.13.0:
+google-gax@^1.13.0, google-gax@^1.9.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/google-gax/-/google-gax-1.14.1.tgz#8271a5293b7b61377d548289964b7e8209984381"
   integrity sha512-lAvILUMnXL+BVSSlbzwpGzs3ZP2r+b1l44zeDTRWceejDgyZORKdPEEhtUw49x9CVwxpPx02+v0yktqnRhUD1A==
@@ -1831,7 +1843,7 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@^3.3.2:
+uuid@^3.3.2, uuid@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==

@@ -49,7 +49,7 @@ export default {
       this.successMessage = ''
       this.errorMessage = ''
       this.loading = true
-      const addWord = functions().httpsCallable('addWord')
+      const addWord = functions.httpsCallable('addWord')
       addWord({
         vocab: this.vocab,
         mean: this.mean,

@@ -8,6 +8,6 @@ firebase.initializeApp(config)
 
 export const auth = firebase.auth
 export const firestore = firebase.firestore
-export const functions = firebase.functions
+export const functions = firebase.app().functions('asia-east2')
 
 export default firebase
