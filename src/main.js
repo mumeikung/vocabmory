@@ -4,7 +4,7 @@ import router from './router'
 import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
-import './assets/stylesheet.css'
+import './assets/webfonts/stylesheet.css'
 
 Vue.config.productionTip = false
 
