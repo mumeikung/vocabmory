@@ -56,7 +56,7 @@ export default {
   methods: {
     signIn () {
       const provider = new auth.GoogleAuthProvider()
-      auth().signInWithPopup(provider).catch((error) => {
+      auth().signInWithRedirect(provider).catch((error) => {
         this.errorMessage = 'Sign In: ' + error.message
         this.errorSnackbar = true
       })
