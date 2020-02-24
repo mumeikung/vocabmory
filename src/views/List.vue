@@ -51,7 +51,7 @@
           <v-list-item-content>
             <v-list-item-title class="japan-title" v-text="word.vocab"></v-list-item-title>
             <v-list-item-title>
-              {{ word.mean }} <span v-if="word.note">({{ word.note }})</span>
+              {{ word.mean }} <span v-if="word.note">[{{ word.note }}]</span>
             </v-list-item-title>
             <v-list-item-subtitle v-if="word.lesson > 0">Lesson {{ word.lesson }}</v-list-item-subtitle>
           </v-list-item-content>

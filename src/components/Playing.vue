@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-btn block @click="stopGame" color="error" :outlined="!ended">{{ ended ? 'STOP!' : 'QUIT!' }}</v-btn>
+      <v-btn block @click="stopGame" color="error" :outlined="!ended">{{ ended ? 'END!' : 'QUIT!' }}</v-btn>
       <v-divider class="mt-4"/>
       <h3 class="mt-4 text-center">
         Question {{ random.length - questions.length }} of {{ random.length }}
@@ -18,7 +18,7 @@
         </v-btn>
         <v-card v-else-if="type === 'jtt' || type === 'ttj' || type === 'type'">
           <v-card-text>
-            <h1 class="japan-question">
+            <h1 :class="(type === 'ttj' || type === 'type' ? 'thai' : 'japan') + ' text-question'">
               {{ getQuestion(question) }}
             </h1>
           </v-card-text>
@@ -28,18 +28,18 @@
         <v-divider/>
       </v-col>
       <v-col cols="12" v-if="type === 'type'" class="text-center">
-        <v-text-field v-if="answer === null" v-model.trim="answerText" label="Answer" class="jp-answer" append-icon="mdi-send" @click:append="answerType" @keypress.enter="answerType" outlined autofocus></v-text-field>
-        <h3 v-if="answer !== null && answer !== getAnswer(question)" class="japan-message-answer success--text">
+        <v-text-field v-if="answer === null" v-model.trim="answerText" label="Answer" class="jp-answer" append-icon="mdi-send" @click:append="answerType" @keypress.enter="answerType" outlined autofocus hide-details></v-text-field>
+        <h3 v-if="answer !== null && answer !== getAnswer(question)" class="japan text-message-answer success--text">
           {{ getAnswer(question) }}
         </h3>
-        <h3 v-if="answer !== null" :class="'japan-message-answer ' + (answer !== getAnswer(question) ? 'error--text' : 'success--text')">
+        <h3 v-if="answer !== null" :class="'japan text-message-answer ' + (answer !== getAnswer(question) ? 'error--text' : 'success--text')">
           {{ answer }}
         </h3>
       </v-col>
       <v-col cols="12" v-for="(choice, i) in choices" :key="i">
         <v-card outlined @click="answerChoice(choice)" :color="getColor(question, choice, answer)">
           <v-card-text class="text-center">
-            <h3 class="japan-answer">
+            <h3 :class="(type === 'jtt' ? 'thai' : 'japan') + ' text-answer'">
               {{ getAnswer(choice) }}
             </h3>
           </v-card-text>
@@ -48,6 +48,11 @@
     </template>
     <audio ref="sound" hidden controls>
       <source v-if="sound" :src="sound"/>
+    </audio>
+    <audio ref="ready_sound" hidden controls preload="auto">
+      <source src="../assets/sounds/ready.ogg" type="audio/ogg">
+      <source src="../assets/sounds/ready.mp3" type="audio/mpeg">
+      <source src="../assets/sounds/ready.wav" type="audio/wav">
     </audio>
     <audio ref="correct_sound" hidden controls preload="auto">
       <source src="../assets/sounds/correct.ogg" type="audio/ogg">
@@ -130,8 +135,11 @@ export default {
       this.type = type
       this.nextQ = false
       this.answer = null
+      this.playReady()
       if (type === 'sound') {
-        this.playSound(this.words[question].sound)
+        setTimeout(() => {
+          this.playSound(this.words[question].sound)
+        }, 500)
       }
     },
     answerChoice (index) {
@@ -179,6 +187,9 @@ export default {
       }
       this.$refs.sound.play()
     },
+    playReady () {
+      this.$refs.ready_sound.play()
+    },
     playCorrect () {
       this.$refs.correct_sound.play()
     },
@@ -217,22 +228,35 @@ export default {
 </script>
 
 <style>
-.japan-question {
+.japan {
   font-family: 'Aozora Mincho' !important;
+}
+.thai {
+  font-family: 'Kanit' !important;
+}
+.text-question.japan {
   font-size: 2.75em !important;
+}
+.text-question.thai {
+  font-size: 2em !important;
+}
+.text-answer.japan {
+  font-size: 1.75em !important;
+}
+.text-answer.thai {
+  font-size: 1.25em !important;
+}
+.text-question {
   line-height: 1.25em !important;
   font-weight: 700 !important;
   color: black;
 }
-.japan-answer {
-  font-family: 'Aozora Mincho' !important;
-  font-size: 1.5em !important;
+.text-answer {
   line-height: 1.25em !important;
   font-weight: 500 !important;
   color: black;
 }
-.japan-message-answer {
-  font-family: 'Aozora Mincho' !important;
+.text-message-answer {
   font-size: 2em !important;
   line-height: 2em !important;
   font-weight: 700 !important;
@@ -242,5 +266,11 @@ export default {
   font-family: 'Aozora Mincho' !important;
   font-size: 1.75em !important;
   font-weight: 500 !important;
+  max-height: auto !important;
+}
+.v-text-field.jp-answer .v-input__control .v-input__slot {
+  min-height: auto !important;
+  display: flex !important;
+  align-items: center !important;
 }
 </style>

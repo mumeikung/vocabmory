@@ -3,8 +3,8 @@
     <v-snackbar v-model="successSnackbar" top color="success">{{ successMessage }}</v-snackbar>
     <v-snackbar v-model="errorSnackbar" top color="error">{{ errorMessage }}</v-snackbar>
     <v-form ref="form" v-model="isValid">
-      <v-text-field v-model="vocab" :rules="[v => !!v || 'โปรดกรอกคำ']" label="คำ" outlined hint="คำจะถูกนำไปแปลงเป็นเสียง" :disabled="loading" autocomplete="off"/>
-      <v-text-field v-model="mean" :rules="[v => !!v || 'โปรดกรอกความหมาย']" label="ความหมาย" outlined :disabled="loading" autocomplete="off"/>
+      <v-text-field v-model="vocab" :rules="[v => !!v || 'โปรดกรอกคำ']" label="คำ (ญี่ปุ่น)" outlined hint="คำจะถูกนำไปแปลงเป็นเสียง" :disabled="loading" autocomplete="off" class="jp-vocab"/>
+      <v-text-field v-model="mean" :rules="[v => !!v || 'โปรดกรอกความหมาย']" label="ความหมาย (ไทย)" outlined :disabled="loading" autocomplete="off"/>
       <v-select v-model.number="lesson" label="บทเรียน" :rules="[v => typeof v === 'number' && v >= 0 && v <= 12 || 'โปรดเลือกเลขบทเรียน']" :items="lessonList" outlined :disabled="loading"/>
       <v-text-field v-model="note" label="Note" outlined hide-details :disabled="loading" autocomplete="off"/>
       <v-radio-group v-model="type" :rules="[v => !!v || 'โปรดเลือกประเภท']" label="ประเภท" mandatory :disabled="loading">
@@ -87,3 +87,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-text-field.jp-vocab input {
+  font-family: 'Aozora Mincho' !important;
+  font-weight: 500;
+}
+</style>
