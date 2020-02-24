@@ -223,6 +223,6 @@ export default {
   font-weight: 500 !important;
 }
 .thai-title {
-  font-family: 'Kanit' !important;
+  font-family: 'Sarabun' !important;
 }
 </style>

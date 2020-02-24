@@ -232,7 +232,7 @@ export default {
   font-family: 'Aozora Mincho' !important;
 }
 .thai {
-  font-family: 'Kanit' !important;
+  font-family: 'Sarabun' !important;
 }
 .text-question.japan {
   font-size: 2.75em !important;
