@@ -29,10 +29,10 @@
       </v-col>
       <v-col cols="12" v-if="type === 'type'" class="text-center">
         <v-text-field v-if="answer === null" v-model.trim="answerText" label="Answer" class="jp-answer" append-icon="mdi-send" @click:append="answerType" @keypress.enter="answerType" outlined autofocus hide-details></v-text-field>
-        <h3 v-if="answer !== null && answer !== getAnswer(question)" class="japan text-message-answer success--text">
+        <h3 v-if="answer !== null && answer !== getAnswer(question)" class="japan text-message-answer success--text correct">
           {{ getAnswer(question) }}
         </h3>
-        <h3 v-if="answer !== null" :class="'japan text-message-answer ' + (answer !== getAnswer(question) ? 'error--text' : 'success--text')">
+        <h3 v-if="answer !== null" :class="'japan text-message-answer ' + (answer !== getAnswer(question) ? 'error--text' : 'success--text correct')">
           {{ answer }}
         </h3>
       </v-col>
@@ -154,18 +154,16 @@ export default {
       this.past += 1
       if (index !== this.question) {
         this.playIncorrect()
-        if (this.type === 'sound') {
-          setTimeout(() => {
-            this.playSound()
-          }, 500)
-        }
       } else {
         this.playCorrect()
         this.correct += 1
       }
       setTimeout(() => {
+        this.playSound(this.words[this.question].sound)
+      }, 400)
+      setTimeout(() => {
         this.nextQuestion()
-      }, 3500)
+      }, 4000)
     },
     answerType () {
       if (this.answer !== null) return null
@@ -173,18 +171,16 @@ export default {
       this.past += 1
       if (this.words[this.question].vocab !== this.answer) {
         this.playIncorrect()
-        if (this.type === 'sound') {
-          setTimeout(() => {
-            this.playSound()
-          }, 400)
-        }
       } else {
         this.playCorrect()
         this.correct += 1
       }
       setTimeout(() => {
+        this.playSound(this.words[this.question].sound)
+      }, 400)
+      setTimeout(() => {
         this.nextQuestion()
-      }, 3500)
+      }, 4000)
     },
     playSound (url = '') {
       if (!!url && this.sound !== url) {
@@ -263,6 +259,11 @@ export default {
   color: black;
 }
 .text-message-answer {
+  font-size: 1.5em !important;
+  line-height: 1.5em !important;
+  font-weight: 500 !important;
+}
+.text-message-answer.correct {
   font-size: 2em !important;
   line-height: 2em !important;
   font-weight: 700 !important;
