@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <template v-if="!playing">
-      <v-snackbar v-model="errorSnackbar" top color="error" :timeout="10000">{{ errorMessage }}</v-snackbar>
+      <v-snackbar v-model="errorSnackbar" top color="error" :timeout="50000">{{ errorMessage }}</v-snackbar>
       <v-row>
         <v-col>
           <v-select v-model="lesson" label="บทเรียน" :items="lessonList" outlined :loading="loading || starting" :readonly="loading" hide-details multiple :disabled="starting">
@@ -26,10 +26,13 @@
           <v-checkbox v-model="target" value="ttj" label="TH (Text) -> JP" :disabled="(target.length <= 1 && target[0] === 'ttj') || starting" hide-details></v-checkbox>
         </v-col>
         <v-col cols="6">
-          <v-checkbox v-model="target" value="sound" label="JP (Sound) -> TH" :disabled="(target.length <= 1 && target[0] === 'sound') || starting"></v-checkbox>
+          <v-checkbox v-model="target" value="sound" label="JP (Sound) -> TH" :disabled="(target.length <= 1 && target[0] === 'sound') || starting" hide-details></v-checkbox>
         </v-col>
         <v-col cols="6">
-          <v-text-field v-model.number="limit" type="number" hint="2 - 10" label="จำนวนตัวเลือกมากสุด" min="2" max="10" inputmode="number" outlined hide-details/>
+          <v-text-field v-model.number="limit" type="number" hint="2 - 10" label="จำนวนตัวเลือกมากสุด" min="2" max="10" inputmode="numeric" outlined hide-details dense :disabled="(target.length <= 1 && target[0] === 'type') || starting"/>
+        </v-col>
+        <v-col cols="12">
+          <v-checkbox v-model="target" value="type" label="TH (Text) -> JP (Text)" :disabled="(target.length <= 1 && target[0] === 'type') || starting"></v-checkbox>
         </v-col>
         <v-col cols="12">
           <v-btn block color="primary" @click="startGame">
@@ -67,10 +70,10 @@
     <template v-else>
       <playing :words="wordList" :random="random" :limit="limit" :target="target" @stop="stopGame"/>
     </template>
-    <audio ref="start_sound" hidden controls preload="metadata">
-      <source src="../assets/sounds/login.ogg" type="audio/ogg">
-      <source src="../assets/sounds/login.mp3" type="audio/mpeg">
-      <source src="../assets/sounds/login.wav" type="audio/wav">
+    <audio ref="start_sound" hidden controls preload="auto">
+      <source src="../assets/sounds/start.ogg" type="audio/ogg">
+      <source src="../assets/sounds/start.mp3" type="audio/mpeg">
+      <source src="../assets/sounds/start.wav" type="audio/wav">
     </audio>
   </v-container>
 </template>
@@ -109,7 +112,7 @@ export default {
       sound: null,
       playing: false,
       timeout: 0,
-      target: ['jtt', 'ttj', 'sound'],
+      target: ['jtt', 'ttj', 'sound', 'type'],
       starting: false,
       random: [],
       limit: 4

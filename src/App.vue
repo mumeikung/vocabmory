@@ -77,6 +77,10 @@ export default {
   padding-top: env(safe-area-inset-top) !important;
 }
 
+.v-snack--top {
+  top: calc(8px + env(safe-area-inset-top)) !important;
+}
+
 .v-dialog.v-dialog--fullscreen .v-toolbar__content, .v-dialog.v-dialog--fullscreen .container {
   padding-left: calc(12px + env(safe-area-inset-left)) !important;
   padding-right: calc(12px + env(safe-area-inset-right)) !important;
