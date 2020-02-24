@@ -121,25 +121,31 @@ export default {
       const choices = []
       const type = this.target[Math.floor(Math.random() * this.target.length)]
       if (type !== 'type') {
-        const count = this.words.length < this.limit ? this.words.length : this.limit
-        const correct = Math.floor(Math.random() * count)
         const worst = [...this.random]
+        if (this.answer) {
+          worst.splice(worst.indexOf(this.question), 1)
+          if (this.type !== 'type' && this.answer !== this.question) {
+            worst.splice(worst.indexOf(this.answer), 1)
+          }
+        }
+        const count = worst.length < this.limit ? worst.length : this.limit
         worst.splice(worst.indexOf(question), 1)
+        const correct = Math.floor(Math.random() * count)
         for (let i = 0; i < count; i++) {
           choices[i] = i === correct ? question : worst.splice(Math.floor(Math.random() * worst.length), 1)[0]
         }
       }
+      this.playReady()
       this.answerText = ''
       this.question = question
       this.choices = choices
       this.type = type
       this.nextQ = false
       this.answer = null
-      this.playReady()
       if (type === 'sound') {
         setTimeout(() => {
           this.playSound(this.words[question].sound)
-        }, 500)
+        }, 250)
       }
     },
     answerChoice (index) {
@@ -170,7 +176,7 @@ export default {
         if (this.type === 'sound') {
           setTimeout(() => {
             this.playSound()
-          }, 500)
+          }, 400)
         }
       } else {
         this.playCorrect()
@@ -262,7 +268,7 @@ export default {
   font-weight: 700 !important;
 }
 .v-text-field.jp-answer input {
-  line-height: 1.25em !important;
+  line-height: 1.75em !important;
   font-family: 'Aozora Mincho' !important;
   font-size: 1.75em !important;
   font-weight: 500 !important;
