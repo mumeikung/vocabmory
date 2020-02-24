@@ -50,7 +50,7 @@
         <v-list-item v-for="word in wordList" :key="word.id">
           <v-list-item-content>
             <v-list-item-title class="japan-title" v-text="word.vocab"></v-list-item-title>
-            <v-list-item-title>
+            <v-list-item-title class="thai-title">
               {{ word.mean }} <span v-if="word.note">[{{ word.note }}]</span>
             </v-list-item-title>
             <v-list-item-subtitle v-if="word.lesson > 0">Lesson {{ word.lesson }}</v-list-item-subtitle>
@@ -221,5 +221,8 @@ export default {
   font-size: 1.25em !important;
   line-height: 1.25em !important;
   font-weight: 500 !important;
+}
+.thai-title {
+  font-family: 'Kanit' !important;
 }
 </style>
