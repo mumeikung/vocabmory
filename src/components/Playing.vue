@@ -269,15 +269,10 @@ export default {
   font-weight: 700 !important;
 }
 .v-text-field.jp-answer input {
-  line-height: 1.75em !important;
+  line-height: 1.5em !important;
   font-family: 'Aozora Mincho' !important;
   font-size: 1.75em !important;
   font-weight: 500 !important;
-  max-height: 2em !important;
-}
-.v-text-field.jp-answer .v-input__control .v-input__slot {
-  min-height: auto !important;
-  display: flex !important;
-  align-items: center !important;
+  max-height: 2.5em !important;
 }
 </style>
