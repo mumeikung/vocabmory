@@ -14,6 +14,7 @@
                   <v-list-item-title>Select All</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
+              <v-divider/>
             </template>
           </v-select>
         </v-col>

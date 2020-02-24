@@ -266,7 +266,7 @@ export default {
   font-family: 'Aozora Mincho' !important;
   font-size: 1.75em !important;
   font-weight: 500 !important;
-  max-height: auto !important;
+  max-height: 2em !important;
 }
 .v-text-field.jp-answer .v-input__control .v-input__slot {
   min-height: auto !important;
