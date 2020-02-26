@@ -28,7 +28,7 @@
         <v-divider/>
       </v-col>
       <v-col cols="12" v-if="type === 'type'" class="text-center">
-        <v-text-field v-if="answer === null" v-model.trim="answerText" label="Answer" class="jp-answer" append-icon="mdi-send" @click:append="answerType" @keypress.enter="answerType" outlined autofocus hide-details></v-text-field>
+        <v-text-field ref="answer_field" v-if="answer === null" v-model.trim="answerText" label="Answer" class="jp-answer" append-icon="mdi-send" @click:append="answerType" @keypress.enter="answerType" outlined autofocus hide-details></v-text-field>
         <h3 v-if="answer !== null && answer !== getAnswer(question)" class="japan text-message-answer success--text correct">
           {{ getAnswer(question) }}
         </h3>
@@ -146,6 +146,11 @@ export default {
         setTimeout(() => {
           this.playSound(this.words[question].sound)
         }, 250)
+      }
+      if (type === 'type') {
+        this.$nextTick(() => {
+          this.$refs.answer_field.$refs.input.focus()
+        })
       }
     },
     answerChoice (index) {
