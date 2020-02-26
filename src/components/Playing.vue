@@ -137,7 +137,8 @@ export default {
       const choices = []
       const type = this.target[Math.floor(Math.random() * this.target.length)]
       if (type !== 'type') {
-        const worst = [...this.random]
+        const worst = []
+        for (let i = 0; i < this.words.length; i++) worst.push(i)
         if (this.answer) {
           worst.splice(worst.indexOf(this.question), 1)
           if (this.type !== 'type' && this.answer !== this.question) {

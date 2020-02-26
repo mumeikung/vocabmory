@@ -27,10 +27,13 @@
           <v-checkbox v-model="target" value="sound" label="JP (Sound) -> TH" :disabled="(target.length <= 1 && target[0] === 'sound') || starting" hide-details></v-checkbox>
         </v-col>
         <v-col cols="6">
-          <v-text-field v-model.number="limit" type="number" hint="2 - 10" label="จำนวนตัวเลือกมากสุด" min="2" max="10" inputmode="numeric" outlined hide-details dense :disabled="(target.length <= 1 && target[0] === 'type') || starting"/>
+          <v-text-field v-model.number="limit" type="number" label="จำนวนตัวเลือกมากสุด" min="2" max="10" inputmode="numeric" outlined hide-details dense :disabled="(target.length <= 1 && target[0] === 'type') || starting"/>
         </v-col>
         <v-col cols="12">
           <v-checkbox v-model="target" value="type" label="TH (Text) -> JP (Text)" :disabled="(target.length <= 1 && target[0] === 'type') || starting"></v-checkbox>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model.number="amount" type="number" label="จำนวนข้อ" min="2" :max="wordList.length" inputmode="numeric" outlined hide-details dense :disabled="starting"/>
         </v-col>
         <v-col cols="12">
           <v-btn block color="primary" @click="startGame">
@@ -117,7 +120,8 @@ export default {
       target: ['jtt', 'ttj', 'sound', 'type'],
       starting: false,
       random: [],
-      limit: 4
+      limit: 5,
+      amount: 2
     }
   },
   computed: {
@@ -166,9 +170,11 @@ export default {
       const allList = []
       const random = []
       for (let i = 0; i < this.wordList.length; i++) allList.push(i)
-      while (allList.length > 0) {
+      let start = this.amount || 2
+      while (allList.length > 0 && start > 0) {
         const index = Math.floor(Math.random() * allList.length)
         random.push(...allList.splice(index, 1))
+        start -= 1
       }
       this.random = random
       this.starting = false
@@ -207,6 +213,7 @@ export default {
               phrase: 4,
               other: 5
             }
+            this.amount = wordList.length
             this.wordList = wordList.sort((a, b) => sortList[a.type] - sortList[b.type]).sort((a, b) => a.lesson - b.lesson)
             this.loading = false
           } catch (error) {
