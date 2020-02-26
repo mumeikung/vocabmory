@@ -2,23 +2,20 @@
   <v-container>
     <template v-if="!playing">
       <v-snackbar v-model="errorSnackbar" top color="error" :timeout="50000">{{ errorMessage }}</v-snackbar>
-      <v-row>
-        <v-col>
-          <v-select v-model="lesson" label="บทเรียน" :items="lessonList" outlined :loading="loading || starting" :readonly="loading" hide-details multiple :disabled="starting">
-            <template v-slot:prepend-item>
-              <v-list-item ripple @click="selectAll">
-                <v-list-item-action>
-                  <v-icon :color="lesson.length > 0 ? 'primary' : ''">{{ selectIcon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title>Select All</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider/>
-            </template>
-          </v-select>
-        </v-col>
-      </v-row>
+      <h1 class="text-center mt-2 mb-6">Japanese - Thai</h1>
+      <v-select v-model="lesson" label="บทเรียน" :items="lessonList" outlined :loading="loading || starting" :readonly="loading" hide-details multiple :disabled="starting">
+        <template v-slot:prepend-item>
+          <v-list-item ripple @click="selectAll">
+            <v-list-item-action>
+              <v-icon :color="lesson.length > 0 ? 'primary' : ''">{{ selectIcon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Select All</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider/>
+        </template>
+      </v-select>
       <v-row v-if="wordList.length > 1" dense>
         <v-col cols="6">
           <v-checkbox v-model="target" value="jtt" label="JP (Text) -> TH" :disabled="(target.length <= 1 && target[0] === 'jtt') || starting" hide-details></v-checkbox>
@@ -42,13 +39,16 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-list three-line v-if="loading === false && lesson.length > 0">
-        <template v-if="wordList.length <= 0">
+      <v-divider v-if="isShow" class="my-3"></v-divider>
+      <v-text-field v-if="isShow" v-model="search" placeholder="ค้นหา..." outlined hide-details></v-text-field>
+      <p v-if="isShow" class="caption my-2" v-text="(!search ? '' : `พบ ${searchList.length} จาก`) + `ทั้งหมด ${wordList.length}`"></p>
+      <v-list three-line v-if="isShow">
+        <template v-if="searchList.length <= 0">
           <v-list-item>
             <v-list-item-title>ไม่พบคำศัพท์</v-list-item-title>
           </v-list-item>
         </template>
-        <v-list-item v-for="word in wordList" :key="word.id">
+        <v-list-item v-for="word in searchList" :key="word.id">
           <v-list-item-content>
             <v-list-item-title class="japan-title" v-text="word.vocab"></v-list-item-title>
             <v-list-item-title class="thai-title">
@@ -91,6 +91,7 @@ export default {
   data () {
     return {
       loading: false,
+      search: '',
       wordList: [],
       lessonList: [
         { text: 'Lesson 7', value: 7 },
@@ -130,6 +131,12 @@ export default {
       if (this.isSelectdAll) return 'mdi-close-box'
       if (this.isSelectdSome) return 'mdi-minus-box'
       return 'mdi-checkbox-blank-outline'
+    },
+    searchList () {
+      return this.wordList.filter(a => a.vocab.search(this.search) >= 0 || a.mean.search(this.search) >= 0)
+    },
+    isShow () {
+      return this.loading === false && this.lesson.length > 0
     }
   },
   methods: {

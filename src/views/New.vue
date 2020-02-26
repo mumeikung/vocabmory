@@ -2,8 +2,9 @@
   <v-container>
     <v-snackbar v-model="successSnackbar" top color="success">{{ successMessage }}</v-snackbar>
     <v-snackbar v-model="errorSnackbar" top color="error">{{ errorMessage }}</v-snackbar>
+    <h1 class="text-center mt-2 mb-6">Japanese - Thai</h1>
     <v-form ref="form" v-model="isValid">
-      <v-text-field v-model="vocab" :rules="[v => !!v || 'โปรดกรอกคำ']" label="คำ (ญี่ปุ่น)" outlined hint="คำจะถูกนำไปแปลงเป็นเสียง" :disabled="loading" autocomplete="off" class="jp-vocab"/>
+      <v-text-field ref="vocab_field" v-model="vocab" :rules="[v => !!v || 'โปรดกรอกคำ']" label="คำ (ญี่ปุ่น)" outlined hint="คำจะถูกนำไปแปลงเป็นเสียง" :disabled="loading" autofocus autocomplete="off" class="jp-vocab"/>
       <v-text-field v-model="mean" :rules="[v => !!v || 'โปรดกรอกความหมาย']" label="ความหมาย (ไทย)" outlined :disabled="loading" autocomplete="off"/>
       <v-select v-model.number="lesson" label="บทเรียน" :rules="[v => typeof v === 'number' && v >= 0 && v <= 12 || 'โปรดเลือกเลขบทเรียน']" :items="lessonList" outlined :disabled="loading"/>
       <v-text-field v-model="note" label="Note" outlined hide-details :disabled="loading" autocomplete="off"/>
@@ -82,6 +83,9 @@ export default {
         this.errorSnackbar = true
       }).finally(() => {
         this.loading = false
+        this.$nextTick(() => {
+          this.$refs.vocab_field.$refs.input.focus()
+        })
       })
     }
   }
