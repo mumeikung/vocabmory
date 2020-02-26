@@ -1,14 +1,14 @@
 <template>
-  <v-row>
+  <v-row dense>
     <v-col cols="12">
       <v-btn block @click="stopGame" color="error" :outlined="!ended">{{ ended ? 'END!' : 'QUIT!' }}</v-btn>
-      <v-divider class="mt-4"/>
+      <v-divider class="mt-3"/>
       <h3 class="mt-4 text-center">
         Question {{ random.length - questions.length }} of {{ random.length }}
         <br>
         Correct {{ correct }} of {{ past }} ({{ percent }})
       </h3>
-      <v-divider class="mt-4"/>
+      <v-divider class="mt-4 mb-2"/>
       <h3 v-if="nextQ" class="mt-4 text-center">WAITING NEXT QUESTION</h3>
     </v-col>
     <template v-if="!ended && question !== null">
@@ -25,7 +25,7 @@
         </v-card>
       </v-col>
       <v-col cols="12">
-        <v-divider/>
+        <v-divider class="my-2"/>
       </v-col>
       <v-col cols="12" v-if="type === 'type'" class="text-center">
         <v-text-field ref="answer_field" v-if="answer === null" v-model.trim="answerText" label="Answer" class="jp-answer" append-icon="mdi-send" @click:append="answerType" @keypress.enter="answerType" outlined autofocus hide-details></v-text-field>
@@ -44,6 +44,21 @@
             </h3>
           </v-card-text>
         </v-card>
+      </v-col>
+    </template>
+    <template v-if="ended">
+      <v-col cols="12">
+        <v-list two-line dense>
+          <v-list-item v-for="(report, i) in answerReport" :key="i">
+            <v-list-item-content>
+              <v-list-item-title :class="(report.font === 'jt' ? 'japan' : 'thai') + ' bold'">{{ report.question }}</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title :class="(report.font === 'tj' ? 'japan' : 'thai') + ' bold success--text'">{{ report.answer }}</v-list-item-title>
+              <v-list-item-subtitle :class="(report.font === 'tj' ? 'japan' : 'thai') + ' error--text small'" v-if="report.your">{{ report.your }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
       </v-col>
     </template>
     <audio ref="sound" hidden controls>
@@ -100,7 +115,8 @@ export default {
       ended: false,
       nextQ: false,
       correct: 0,
-      past: 0
+      past: 0,
+      answerReport: []
     }
   },
   mounted () {
@@ -128,8 +144,8 @@ export default {
             worst.splice(worst.indexOf(this.answer), 1)
           }
         }
-        const count = worst.length < this.limit ? worst.length : this.limit
         worst.splice(worst.indexOf(question), 1)
+        const count = (worst.length + 1) < this.limit ? (worst.length + 1) : this.limit
         const correct = Math.floor(Math.random() * count)
         for (let i = 0; i < count; i++) {
           choices[i] = i === correct ? question : worst.splice(Math.floor(Math.random() * worst.length), 1)[0]
@@ -157,12 +173,28 @@ export default {
       if (this.answer !== null) return null
       this.answer = index
       this.past += 1
+
+      const data = {}
+      if (this.type === 'jtt' || this.type === 'sound') {
+        data.font = 'jt'
+        data.question = this.words[this.question].vocab
+        data.answer = this.words[this.question].mean
+        if (index !== this.question) data.your = this.words[index].mean
+      } else if (this.type === 'ttj') {
+        data.font = 'tj'
+        data.question = this.words[this.question].mean
+        data.answer = this.words[this.question].vocab
+        if (index !== this.question) data.your = this.words[index].vocab
+      }
+      this.answerReport.push(data)
+
       if (index !== this.question) {
         this.playIncorrect()
       } else {
         this.playCorrect()
         this.correct += 1
       }
+
       setTimeout(() => {
         this.playSound(this.words[this.question].sound)
       }, 400)
@@ -174,12 +206,21 @@ export default {
       if (this.answer !== null) return null
       this.answer = this.answerText
       this.past += 1
+
+      const data = {}
+      data.font = 'tj'
+      data.question = this.words[this.question].mean
+      data.answer = this.words[this.question].vocab
+      if (this.words[this.question].vocab !== this.answer) data.your = this.answerText
+      this.answerReport.push(data)
+
       if (this.words[this.question].vocab !== this.answer) {
         this.playIncorrect()
       } else {
         this.playCorrect()
         this.correct += 1
       }
+
       setTimeout(() => {
         this.playSound(this.words[this.question].sound)
       }, 400)
@@ -235,11 +276,20 @@ export default {
 </script>
 
 <style>
+.error--text.small {
+  font-size: 0.75em;
+}
 .japan {
   font-family: 'Aozora Mincho' !important;
 }
 .thai {
   font-family: 'Sarabun' !important;
+}
+.japan.bold {
+  font-weight: 700 !important;
+}
+.thai.bold, .japan.bold {
+  line-height: 1.5em !important;
 }
 .text-question.japan {
   font-size: 2.75em !important;
