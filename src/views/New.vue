@@ -75,7 +75,10 @@ export default {
         note: this.note,
         type: this.type
       }).then((response) => {
-        this.$refs.form.reset()
+        this.vocab = null
+        this.mean = null
+        this.note = null
+        this.$refs.form.resetValidation()
         this.successMessage = response.data.message
         this.successSnackbar = true
       }).catch((error) => {

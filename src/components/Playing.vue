@@ -116,7 +116,8 @@ export default {
       nextQ: false,
       correct: 0,
       past: 0,
-      answerReport: []
+      answerReport: [],
+      lastChoice: -1
     }
   },
   mounted () {
@@ -135,7 +136,14 @@ export default {
       }
       const question = this.questions.pop()
       const choices = []
-      const type = this.target[Math.floor(Math.random() * this.target.length)]
+      let type = this.target[Math.floor(Math.random() * this.target.length)]
+      if (type === 'type') {
+        if (this.words[question].type === 'phrase' && this.target.length > 1) {
+          const target = [...this.target]
+          target.splice(target.indexOf('type'), 1)
+          type = target[Math.floor(Math.random() * target.length)]
+        }
+      }
       if (type !== 'type') {
         const worst = []
         for (let i = 0; i < this.words.length; i++) worst.push(i)
@@ -147,7 +155,16 @@ export default {
         }
         worst.splice(worst.indexOf(question), 1)
         const count = (worst.length + 1) < this.limit ? (worst.length + 1) : this.limit
-        const correct = Math.floor(Math.random() * count)
+        let correct = Math.floor(Math.random() * count)
+        if (this.lastChoice >= 0) {
+          const random = []
+          for (let i = count - 1; i >= 0; i--) random.push(i)
+          for (let i = 0; i < count; i++) {
+            if (i !== this.lastChoice) random.push(i)
+          }
+          correct = random[Math.floor(Math.random() * random.length)]
+        }
+        this.lastChoice = correct
         for (let i = 0; i < count; i++) {
           choices[i] = i === correct ? question : worst.splice(Math.floor(Math.random() * worst.length), 1)[0]
         }
