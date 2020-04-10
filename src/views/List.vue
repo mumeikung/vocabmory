@@ -57,7 +57,7 @@
             <v-list-item-title class="thai-title">
               {{ word.mean }} <span v-if="word.note">[{{ word.note }}]</span>
             </v-list-item-title>
-            <v-list-item-subtitle v-if="word.lesson > 0">Lesson {{ word.lesson }}</v-list-item-subtitle>
+            <v-list-item-subtitle v-if="word.lesson > 0">Lesson {{ word.lesson }} <span v-if="debug" class="caption">(ID: {{ word.id }}, File: {{ fileName(word.sound) }})</span></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
             <v-btn icon @click="playSound(word.sound)">
@@ -67,6 +67,7 @@
           </v-list-item-action>
         </v-list-item>
       </v-list>
+      <v-switch v-if="isShow" v-model="debug" label="Debug" hide-details></v-switch>
       <audio ref="sound" hidden controls>
         <source v-if="sound" :src="sound"/>
       </audio>
@@ -121,7 +122,8 @@ export default {
       starting: false,
       random: [],
       limit: 5,
-      amount: 2
+      amount: 2,
+      debug: false
     }
   },
   computed: {
@@ -184,6 +186,10 @@ export default {
     stopGame () {
       this.playing = false
       this.random = []
+    },
+    fileName (url = '') {
+      const found = url.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.mp3/g)
+      return (found[0] || '').replace('.mp3', '')
     }
   },
   watch: {

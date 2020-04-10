@@ -13,10 +13,10 @@
     </v-col>
     <template v-if="!ended && question !== null">
       <v-col cols="12" class="text-center">
-        <v-btn v-if="type === 'sound'" icon @click="playSound()" x-large color="primary" outlined>
+        <v-btn v-if="type === 'sound' && !answer" icon @click="playSound()" x-large color="primary" outlined>
           <v-icon>mdi-play-circle</v-icon>
         </v-btn>
-        <v-card v-else-if="type === 'jtt' || type === 'ttj' || type === 'type'">
+        <v-card v-else-if="type === 'jtt' || type === 'ttj' || type === 'type' || (type === 'sound' && !!answer)">
           <v-card-text>
             <h1 :class="(type === 'ttj' || type === 'type' ? 'thai' : 'japan') + ' text-question'">
               {{ getQuestion(question) }}
@@ -267,7 +267,7 @@ export default {
     },
     getQuestion (index) {
       if (!this.words[index]) return ''
-      if (this.type === 'jtt') return this.words[index].vocab
+      if (this.type === 'jtt' || this.type === 'sound') return this.words[index].vocab
       if (this.type === 'ttj' || this.type === 'type') return this.words[index].mean
       return ''
     },
@@ -295,7 +295,7 @@ export default {
 
 <style>
 .error--text.small {
-  font-size: 0.75em;
+  font-size: 0.75em !important;
 }
 .japan {
   font-family: 'Aozora Mincho' !important;
@@ -305,6 +305,12 @@ export default {
 }
 .japan.bold {
   font-weight: 700 !important;
+}
+.thai.bold {
+  font-weight: 500 !important;
+}
+.thai.small, .japan.small {
+  font-weight: 300 !important;
 }
 .thai.bold, .japan.bold {
   line-height: 1.5em !important;
