@@ -26,8 +26,9 @@ export const addWord = functions.region('asia-east2').https.onCall(async (data, 
   let soundPath: string
   const filename = `${uuidv4()}.mp3`
   try {
+    const synt = data.synt || data.vocab
     const [response] = await textToSpeech.synthesizeSpeech({
-      input: { text: data.vocab },
+      input: { text: synt },
       voice: { name: 'ja-JP-Standard-A', languageCode: 'ja-JP' },
       audioConfig: { audioEncoding: 'MP3' }
     })

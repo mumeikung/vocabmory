@@ -21,9 +21,13 @@
         <span>New</span>
         <v-icon>mdi-plus</v-icon>
       </v-btn>
+      <v-btn to="/newlist">
+        <span>New List</span>
+        <v-icon>mdi-playlist-plus</v-icon>
+      </v-btn>
       <v-btn to="/list">
         <span>List</span>
-        <v-icon>mdi-view-list</v-icon>
+        <v-icon>mdi-playlist-play</v-icon>
       </v-btn>
     </v-bottom-navigation>
   </v-app>
